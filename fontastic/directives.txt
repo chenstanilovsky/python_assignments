@@ -1,4 +1,0 @@
-english morse testfont1.txt out1.txt
-english phonetic testfont1.txt out2.txt
-english fruit testfont1.txt out3.txt
-english fruit testfont2.txt out3.txt
