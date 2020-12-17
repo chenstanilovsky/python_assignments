@@ -1,8 +1,0 @@
-Bob 4
-John 6
-Ben 6
-Emile 6
-Leon 7
-Kelley 7
-Henry 9
-Lily 11

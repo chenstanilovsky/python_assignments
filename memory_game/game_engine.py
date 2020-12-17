@@ -28,7 +28,7 @@ def getKCards(k):
                 cards_list.append(line)
     except IOError:
         generate_default_config()
-        getKCards(k)
+        return getKCards(k)
     return cards_list
 
 def generate_cards_list(num):

@@ -1,0 +1,123 @@
+- Data structures used
+    - A dictionary was used to keep track of the different turtle by name rather than by index
+    - Lists were used multiple times
+        - Kept track of the locations of assets of cards
+        - Kept track of the turtles of each card, each value here matchs the position where the card is in the list with the locations
+        - Kept track of each cards x position
+        - Kept track of each cards y position, each index here lines up with the x position list
+
+- Approach to testing
+    - For this project, testing was definitely a challenge. The main form of testing occured as visual tests.
+    I would work on the program a bit, and then I would run the game to see if what I programmed was reflected properly on the screen.
+    This was especially useful for figuring out positions to put the various assets. Other than this, I also used print statements
+    to see the values of certain varaibles that did not get displayed on the screen. This was used to manage the cards lists that 
+    kept track of the locations of each cards asset and much more. Most testing occured iteravely, where I would try something and I would see if it worked.
+    Then if it didn't work, I reworked the program and tried again. I repeated this process until I was satisfied with my work.
+
+- File: memory_game.py
+    - get_username(s)
+        - Read username input from user and validates input to check for empty names
+    - get_num_cards(s)
+        - Read number of cards input from user and validate to make sure 8, 10, or 12 in entered
+    - generate_turtle()
+        - Creates all of the trutles needed for the template of the game, excluding cards
+        - Stores the turtles in a dict to allow parameter lists to be shorter
+    - shuffle(cards)
+        - cards is a list of file locations for the assets of each card
+        - shuffle mixes the order of the assets
+    - init_game(s, t_dict)
+        - gets username and number of cards that the user wants
+        - Creates the board which is the 3 boxes that get drawn
+        - Then it fills the board with the highscores and initial status of 0 guesses and matches
+        - Then it adds the quit button to allow the user to quit at any time
+        - Then we generate a list of cards based on the number the user input
+        - Then we shuffle the list of cards to ensure that the game isn't easy
+        - Based on the order of the shuffled cards, we make a matching list of turtles, one for each card
+        - Then we place the cards and save their placements so that we can determine which card is clicked later
+        - finally we start the game
+    - main()
+        - Initializes the screen and generates the initial turtles for creating the template
+        - Then it calls init_game and turtle.done() to stop program from instantly closing
+
+- File: create_board.py
+    - move_to(t,x,y)
+        - Simply made to save space. Calling this allows me to not have to deal with picking the pen up and down
+    - draw_to(t,x,y)
+        - Similar concept as move_to, avoids having to call pendown each time we want to draw
+    - draw_main(t)
+        - Draws out the box for the game board
+    - draw_highscores(t)
+        - Draws out the box for the high scores
+    - draw_stats(t)
+        - Draws out the box for the status
+    - draw_board(t)
+        - Calls the above 3 methods to draw the entire game's boxes
+    - get_highscores(s, file)
+        - Reads the current highscores.txt file and converts it to a list
+        - If the file doesn't exist, it will be created and an error will be displayed
+    - fill_highscores(t, hs)
+        - Fills the highscore box with the highscores read from highscores.txt
+    - fill_stats(t, guesses, matches)
+        - Used to update the status box with the current status
+        - Initially it gets called with guesses = 0, and matches = 0
+    - fill_board(s, status_t, highscore_t)
+        - Calls the above 3 methods to fill the initial content of the screen
+    - add_quit_button(s,t)
+        - Adds a button that the user can click to quit the game at any time
+    - place_cards(t_cards)
+        - Determines where cards should be placed based on the number of cards the user input
+        - Then it uses the turtles made for the cards to place the cards in the right position
+        - Returns the placement of each card so that we can determine if a click is on a card later on
+
+- File: game_engine.py
+    - generate_default_config()
+        - This is called if the config file is missing
+        - Generates a default config file
+    - getKCards(k)
+        - This tries to open the config file
+            - If the file exists, we will add k/2 cards from the config. Each card get's added twice.
+            - If the file does not exist, calls generate_default_config and runs getKCards(k) again.
+    - generate_cards_list(num)
+        - wrapper function for getKCards
+    - generate_cards_turtles(s, cards)
+        - Creates 1 turtle for each card that was generated
+    - select_card(card, t_card)
+        - Flips a card face up
+    - remove_cards(cards, t_cards, idx_1, idx_2, pl_x, pl_y)
+        - Removes a pair of cards, gets called when a matching pair is selected
+        - It deletes the idx that comes after first, so that the second index doesn't change after the first removal
+        - It removes the card asset from cards, the card's turtle from t_cards, and its x and y position from pl_x and pl_y
+        - It does this for both cards
+    - place_down_card(t_card)
+        - Flips card face-down
+    - do_nothing(x,y)
+        - Used as a dummy onclick function to stop the user from doing anything
+    - quit_game(s)
+        - Called when quit button is pressed
+        - Displayed quit message and disables clicks
+        - Does not update highscores
+    - write_highscores(hs)
+        - Called at the end of a successful game
+        - Rewrites highscores.txt file with the new highscore
+    - update_highscores(s, guesses, name)
+        - Adds the new score to the proper position in the highscores list
+        - If highscore is not high enough, it does not get added
+        - If adding this highscore causes there to be more than 8 highscores, lowest score gets removed
+    - win_game(s,name)
+        - Called when no cards are left on the game board
+        - Displays win message and updates highscores accordingly
+    - start_game(s, t_dict, cards, t_cards, pl_x, pl_y, name)
+        - Main game loop
+        - Adds "process_click" function as onclick event for screen
+        - Internally defines process_click
+    - process_click(x,y)
+        - onclick even of screen, temporarily disable onclick even of screen while click is being processed
+        - First determines if quit button was clicked and calls quit_game if so
+        - Then it determines which card was clicked
+            - If no card was clicked, it does nothing
+            - If a card was clicked
+                - If this is the first selection of a card, it gets saved and game continues
+                - If a card was already selected before, the file locations of each card get compared
+                    - If the locations match, both cards get removed and matches/guesses is updated + 1
+                    - If location doesn't match, both cards get flipped face down and only matches is updated + 1
+                    - Updates status
