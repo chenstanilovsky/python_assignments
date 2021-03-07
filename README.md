@@ -1,0 +1,1 @@
+A graphic memory game using Turtle Graphics. This game is a card based game where you get to flip over 1 card at a time. When 2 cards are face up, if they match they are removed from the board. If they do not match, they are flipped face down again. The game continues until all matching pairs are removed.
