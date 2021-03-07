@@ -1,0 +1,1 @@
+A fraction class which stores numerator and denominator. The class allows you to validate the fraction, gets its reciprocal, multiply it against some other fraction object and divide it against some fraction objects.
